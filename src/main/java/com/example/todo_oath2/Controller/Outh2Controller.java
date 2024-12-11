@@ -20,6 +20,11 @@ public class Outh2Controller {
         return "Get ALL";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "redirect:/oauth2/authorization/google";
+    }
+
     @GetMapping("/admin/1")
     public String getAdmin() {
         return "Admin only get this page";

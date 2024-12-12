@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,10 +20,12 @@ public class SecurityConfig {
 
     private final SocialAppService socialAppService;
     private final CustomLogoutHandler customLogoutHandler;
+    private final ErrorHandlingFilter errorHandlingFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(errorHandlingFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/", "/login", "/error", "/webjars/**").permitAll() // Разрешаем доступ к этим маршрутам всем
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
@@ -33,7 +36,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) // Обработка ошибок аутентификации
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
-                        .loginPage("/") // Указываем страницу для входа
+                        .authorizationEndpoint(o -> o.baseUri("/login")) // Указываем страницу для входа
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(socialAppService))
                         .defaultSuccessUrl("/user")

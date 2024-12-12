@@ -29,4 +29,9 @@ public class Outh2Controller {
                 role);
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "Get ALL";
+    }
+
 }

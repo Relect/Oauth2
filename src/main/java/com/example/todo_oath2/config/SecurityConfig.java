@@ -32,9 +32,9 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name()) // Только для администраторов
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) // Обработка ошибок аутентификации
-                )
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+ //                       .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) // Обработка ошибок аутентификации
+  //              )
                 .oauth2Login(oauth2Login -> oauth2Login
                         .authorizationEndpoint(o -> o.baseUri("/login")) // Указываем страницу для входа
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
